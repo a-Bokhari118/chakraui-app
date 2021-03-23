@@ -1,24 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
 
+import { Container, Heading, VStack, IconButton, Box } from '@chakra-ui/react';
+import { FaSun, FaMoon } from 'react-icons/fa';
+import TodoList from './components/TodoList';
+import AddTodo from './components/AddTodo';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <VStack p={4}>
+      <IconButton
+        icon={<FaSun />}
+        isRound='true'
+        size='lg'
+        alignSelf='flex-end'
+      />
+      <Heading
+        mb='8'
+        fontWeight='extrabold'
+        size='2xl'
+        bgGradient='linear(to-r, purple.500, pink.300, blue.500)'
+        backgroundClip='text'
+      >
+        TODO APPLICATION
+      </Heading>
+      <AddTodo />
+      <TodoList />
+    </VStack>
   );
 }
 
