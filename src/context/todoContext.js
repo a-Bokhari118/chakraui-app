@@ -3,7 +3,7 @@ import { createContext, useReducer } from 'react';
 export const TodoContext = createContext();
 
 const initialState = {
-  todos: [],
+  todos: JSON.parse(localStorage.getItem('todos')) || [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,14 +19,15 @@ const reducer = (state = initialState, action) => {
         todos: state.todos.filter((todo) => todo.id !== action.payload),
       };
     case 'TOG_TODO':
-      state.todos.map((todo) => {
-        if (todo.id === action.payload) {
-          todo.complete = !todo.complete;
-        }
-      });
       return {
         ...state,
+        todos: state.todos.map((todo) =>
+          todo.id === action.payload
+            ? { ...todo, complete: !todo.complete }
+            : todo
+        ),
       };
+
     default:
       return state;
   }
@@ -40,6 +41,7 @@ export const TodoProvider = (props) => {
       type: 'ADD_TODO',
       payload: todo,
     });
+    localStorage.setItem('todos', JSON.stringify([...state.todos, todo]));
   }
 
   function deleteTodo(id) {
@@ -47,6 +49,8 @@ export const TodoProvider = (props) => {
       type: 'DELETE_TODO',
       payload: id,
     });
+    const afterTodo = state.todos.filter((todo) => todo.id !== id);
+    localStorage.setItem('todos', JSON.stringify(afterTodo));
   }
 
   function toggolTodo(id) {
@@ -54,6 +58,10 @@ export const TodoProvider = (props) => {
       type: 'TOG_TODO',
       payload: id,
     });
+    const afet = state.todos.map((todo) =>
+      todo.id === id ? { ...todo, complete: !todo.complete } : todo
+    );
+    localStorage.setItem('todos', JSON.stringify(afet));
   }
 
   return (

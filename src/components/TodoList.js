@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Heading,
   HStack,
@@ -6,6 +5,7 @@ import {
   Spacer,
   StackDivider,
   Text,
+  useColorMode,
   VStack,
 } from '@chakra-ui/react';
 import { FaTrash } from 'react-icons/fa';
@@ -15,10 +15,8 @@ import { TodoContext } from '../context/todoContext';
 const TodoList = () => {
   const { todos, deleteTodo, toggolTodo } = useContext(TodoContext);
   console.log(todos);
+  const { colorMode } = useColorMode();
 
-  const completeHandler = (id) => {
-    toggolTodo(id);
-  };
   return (
     <VStack
       divider={<StackDivider />}
@@ -30,13 +28,22 @@ const TodoList = () => {
       maxW={{ base: '90vw', sm: '80vw', lg: '50vw', xl: '40vw' }}
       alignItems='stretch'
     >
-      {todos.length > 0 ? (
+      {todos?.length > 0 ? (
         todos.map((todo) => (
           <HStack key={todo.id}>
             <Text
               as={todo.complete ? 'del' : ''}
-              onClick={() => completeHandler(todo.id)}
-              color={todo.complete ? 'gray.300' : 'gray.900'}
+              onClick={() => toggolTodo(todo.id)}
+              color={
+                colorMode === 'light'
+                  ? todo.complete
+                    ? 'gray.300'
+                    : 'gray.900'
+                  : todo.complete
+                  ? 'whiteAlpha.400'
+                  : 'whiteAlpha'
+              }
+              cursor='pointer'
             >
               {todo.text}
             </Text>
@@ -49,7 +56,11 @@ const TodoList = () => {
           </HStack>
         ))
       ) : (
-        <Heading alignSelf='center' color='teal.500'>
+        <Heading
+          alignSelf='center'
+          bgGradient='linear(to-r, purple.500, pink.300, blue.500)'
+          backgroundClip='text'
+        >
           Eyyyy No Todos!
         </Heading>
       )}

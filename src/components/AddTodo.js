@@ -1,11 +1,21 @@
-import { Box, Button, HStack, Input } from '@chakra-ui/react';
+import { Button, HStack, Input, useToast } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { TodoContext } from '../context/todoContext';
 const AddTodo = () => {
   const { addTodo } = useContext(TodoContext);
   const [text, setText] = useState('');
+  const toast = useToast();
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!text) {
+      toast({
+        title: 'No Content Added!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     const newTodo = {
       id: Math.floor(Math.random() * 100000000),
       text,
